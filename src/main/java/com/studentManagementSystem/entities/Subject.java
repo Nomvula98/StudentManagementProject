@@ -33,9 +33,7 @@ public class Subject implements Serializable {
         return subjectCode;
     }
 
-    public void setSubjectCode(Long subjectCode) {
-        this.subjectCode = subjectCode;
-    }
+
 
     public String getSubjectName() {
         return subjectName;

@@ -11,18 +11,19 @@ public class AttendanceRegister implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long registerId;
-    @Column(name= "student_name")
+    @Column(name= "student_name", nullable = false)
     private String studentName;
-    @Column(name= "student_surname")
+    @Column(name= "student_surname", nullable = false)
     private String studentSurname;
-    @Column(name= "student_id")
+    @Column(name= "student_id", nullable = false)
     private Long studentId;
-    @Column(name= "teacher_name")
+    @Column(name= "teacher_name", nullable = false)
     private String teacherName;
-    @Column(name= "teacher_surname")
+    @Column(name= "teacher_surname", nullable = false)
     private String teacherSurname;
-    @Column(name= "teacher_id")
+    @Column(name= "teacher_id", nullable = false)
     private Long teacherId;
+    @Column(nullable = false)
     private String attendanceStatus;
     private Date date;
     private String subjectCode;

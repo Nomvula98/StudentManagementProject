@@ -2,6 +2,7 @@ package com.studentManagementSystem.services;
 
 
 import com.studentManagementSystem.entities.Subject;
+import com.studentManagementSystem.constants.AppConstants;
 import com.studentManagementSystem.repositories.SubjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,26 +24,30 @@ public class SubjectService {
      * @return a string confirming successful submission or not
      *
      **/
-    public String registerSubject(Subject subject)
-    {
-        subjectList = subjectRepository.findBySubjectCode(subject.getSubjectCode());
-        try {
-            if (isNull(subject)) {
-                return "Enter subject details";
-            }
-            else if(!subjectList.isEmpty()){
-                return "Subject already exists";
-            }
-                else if (subject.getSubjectCode() == null || subject.getSubjectName() == null){
-                return "There's a missing mandatory field";
-            } else {
-                subjectRepository.save(subject);
+    public String registerSubject(String role, Subject subject) throws Exception {
+        if(role.equalsIgnoreCase(AppConstants.ADMIN)) {
+            subjectList = subjectRepository.findBySubjectCode(subject.getSubjectCode());
+            try {
+                if (isNull(subject)) {
+                    return "Enter subject details";
+                } else if (!subjectList.isEmpty()) {
+                    return "Subject already exists";
+                } else if (subject.getSubjectCode() == null || subject.getSubjectName() == null) {
+                    return "There's a missing mandatory field";
+                } else {
+                    subjectRepository.save(subject);
 
+                }
+            } catch (Exception e) {
+                e.getMessage();
             }
-        }catch (Exception e){
-            e.getMessage();
+            return "Successfully saved Subject";
         }
-        return "Successfully saved Subject";
+        else {
+            throw new Exception("You do not have the rights to add subject");
+        }
+
+
     }
 
     /**
@@ -51,14 +56,18 @@ public class SubjectService {
      * @return a List of subjects
      *
      **/
-    public List<Subject> retrieveAllSubjects()
-    {
-        try {
-            subjectList = subjectRepository.findAll();
-        }catch (ArrayIndexOutOfBoundsException E){
-            E.getMessage();
-        }catch (Exception Ex){
-            Ex.getMessage();
+    public List<Subject> retrieveAllSubjects(String role) throws Exception {
+        if (role.equalsIgnoreCase(AppConstants.ADMIN)) {
+            try {
+                subjectList = subjectRepository.findAll();
+            } catch (ArrayIndexOutOfBoundsException E) {
+                E.getMessage();
+            } catch (Exception Ex) {
+                Ex.getMessage();
+            }
+        }
+        else {
+            throw new Exception("You do not have the rights to retrieve all subjects");
         }
         return subjectList;
     }
@@ -70,16 +79,19 @@ public class SubjectService {
      * @return a string confirming successful update or not
      *
      **/
-    public String updateSubjectInfo(Long subjectCode, Subject subject)
-    {
-        subjectList = subjectRepository.findBySubjectCode(subjectCode);
-        if (subjectList.isEmpty()) {
-            return "Subject is not registered";
+    public String updateSubjectInfo(String role, Long subjectCode, Subject subject) throws Exception {
+        if (role.equalsIgnoreCase(AppConstants.ADMIN)) {
+            subjectList = subjectRepository.findBySubjectCode(subjectCode);
+            if (subjectList.isEmpty()) {
+                return "Subject is not registered";
+            } else {
+                subjectRepository.delete(subjectList.get(0));
+                subjectRepository.save(subject);
+                return "Successfully updated Subject";
+            }
         }
-        else{
-            subjectRepository.delete(subjectList.get(0));
-            subjectRepository.save(subject);
-            return "Successfully updated Subject";
+        else {
+            throw new Exception("You do not have the rights to update subject details");
         }
     }
 
@@ -90,13 +102,18 @@ public class SubjectService {
      * @return a string confirming successful delete
      *
      **/
-    public String deleteSubject(Long subjectCode) {
-        subjectList = subjectRepository.findBySubjectCode(subjectCode);
-        if (subjectList.isEmpty()) {
-            return "Subject is not registered";
-        } else {
-            subjectRepository.delete(subjectList.get(0));
-            return "Successfully deleted subject";
+    public String deleteSubject(String role, Long subjectCode) throws Exception {
+        if (role.equalsIgnoreCase(AppConstants.ADMIN)) {
+            subjectList = subjectRepository.findBySubjectCode(subjectCode);
+            if (subjectList.isEmpty()) {
+                return "Subject is not registered";
+            } else {
+                subjectRepository.delete(subjectList.get(0));
+                return "Successfully deleted subject";
+            }
+        }
+        else {
+            throw new Exception("You do not have the rights to delete subject");
         }
     }
 }
