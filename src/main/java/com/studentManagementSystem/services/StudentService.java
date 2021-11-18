@@ -58,10 +58,12 @@ public class StudentService {
         if (role.equalsIgnoreCase(AppConstants.ADMIN)) {
             try {
                 studentList = studentRepository.findAll();
-            } catch (ArrayIndexOutOfBoundsException E) {
-                E.getMessage();
-            } catch (Exception Ex) {
-                Ex.getMessage();
+            }
+            catch (ArrayIndexOutOfBoundsException E) {
+                throw new Exception(E.getMessage());
+            }
+            catch (Exception Ex) {
+                throw new Exception(Ex.getMessage());
             }
             return studentList;
         }

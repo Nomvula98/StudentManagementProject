@@ -1,16 +1,16 @@
 package com.studentManagementSystem.repositories;
 
+
 import com.studentManagementSystem.entities.Teacher;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+
 @DataJpaTest
 public class TeacherRepositoryTest {
     @Autowired
@@ -18,7 +18,7 @@ public class TeacherRepositoryTest {
 
     Teacher teacher = new Teacher();
     @Test
-    public void testSavingToStudentTable(){
+    public void testSavingToTeacherTable(){
         teacher = teacherRepository.save(completeTeacher());
         assertNotNull(teacher);
         assertNotNull(teacher.getEmail());
@@ -29,7 +29,7 @@ public class TeacherRepositoryTest {
     }
 
     @Test
-    public void testUpdateStudent(){
+    public void testUpdateTeacher(){
         teacher = teacherRepository.save(completeTeacher());
         assertNotNull(teacher);
         teacher.setName("Hazel");
@@ -39,7 +39,7 @@ public class TeacherRepositoryTest {
     }
 
     @Test
-    public void testFindByStudentId(){
+    public void testFindByTeacherId(){
         List<Teacher> teacherList;
         teacherList = teacherRepository.findByUserId(completeTeacher().getUserId());
         assertNotNull(teacherList);
